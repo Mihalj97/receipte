@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import Recipe from './Recipe';
 import './App.css';
 import { useEffect, useState } from 'react';
 
@@ -7,8 +7,7 @@ function App() {
   const APP_ID = '46adbe9e'
   const APP_KEY = '243d842a57615982c4b567f18d96f476'
 
-
-  const [counter, setCounter] = useState(0);
+  const [recipes, setRecipes] = useState([])
 
   useEffect(() => {
     getRecipes()
@@ -19,7 +18,7 @@ function App() {
   const getRecipes = async () => {
     const response = await fetch(`https://api.edamam.com/search?q=chicken&app_id=${APP_ID}&app_key=${APP_KEY}`)
     const data = await response.json()
-    console.log(data.hits);
+    setRecipes(data.hits)
 
     // Another example of taking data from API
     // fetch(tps://api.edamam.com)
@@ -39,6 +38,13 @@ function App() {
             Search
           </button>
         </form>
+        {recipes.map(recipe => (
+          <Recipe
+            title={recipe.recipe.label}
+            calories={recipe.recipe.calories}
+            image={recipe.recipe.image}
+          />
+        ))}
       </div>
     </>
   );
